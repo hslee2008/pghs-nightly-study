@@ -1,6 +1,6 @@
 export default function getSchedule(date) {
   // if from 4:50pm to 7:50pm -> 1st period, 8:10pm to 9:50pm -> 2nd period
-  const localDate = new Date(data ?? null);
+  const localDate = new Date(date ?? null);
   const hour = localDate.getHours();
   const minute = localDate.getMinutes();
 
