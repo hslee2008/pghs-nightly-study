@@ -1,5 +1,10 @@
 export default function getSchedule(date) {
-  // if from 4:50pm to 7:50pm -> 1st period, 8:10pm to 9:50pm -> 2nd period
+  // Check if the environment is development
+  if (process.env.NODE_ENV === "development") {
+    return 1; // Always return 1 in development mode
+  }
+
+  // Normal logic for calculating schedule
   const localDate = new Date(date ?? null);
   const hour = localDate.getHours();
   const minute = localDate.getMinutes();

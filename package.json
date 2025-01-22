@@ -10,9 +10,11 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "chart.js": "^4.4.7",
     "firebase": "^11.1.0",
     "nuxt": "^3.14.1592",
     "vue": "latest",
+    "vue-chartjs": "^5.3.2",
     "vue-router": "latest",
     "vue3-charts": "^1.1.33",
     "vuetify-nuxt-module": "^0.18.3"

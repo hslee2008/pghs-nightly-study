@@ -40,10 +40,26 @@
 
     <v-btn color="primary" block @click="checkIn">출석하기</v-btn>
 
-    <v-dialog v-model="checkedIn" max-width="500" persistent>
-      <v-card class="pb-3 text-center">
+    <v-dialog v-model="checkedIn" max-width="600" persistent>
+      <v-card class="pb-3 text-center pt-5">
+        <div class="text-center">
+          <v-icon size="x-large">mdi-desk-lamp</v-icon>
+        </div>
+
         <v-card-title> {{ name }} | 야자 {{ getSchedule() }}교시 </v-card-title>
         <v-card-subtitle> {{ seat }} </v-card-subtitle>
+
+        <br />
+
+        <v-card-actions class="d-flex justify-center">
+          <v-btn color="primary" variant="tonal" to="/data">
+            야자 순위 보기
+          </v-btn>
+        </v-card-actions>
+
+        <div>
+          <p class="text-grey">버전 v0.0.1</p>
+        </div>
       </v-card>
     </v-dialog>
   </div>
