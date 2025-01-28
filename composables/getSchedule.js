@@ -1,7 +1,7 @@
 export default function getSchedule(date) {
   // Check if the environment is development
   if (process.env.NODE_ENV === "development") {
-    return 1; // Always return 1 in development mode
+    return 2; // Always return 1 in development mode
   }
 
   // Normal logic for calculating schedule

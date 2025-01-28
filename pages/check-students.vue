@@ -5,11 +5,13 @@
       <template v-slot:text>
         <v-text-field
           v-model="search1"
-          placeholder="학생 검색하기"
+          placeholder="야자 1교시 학생 검색하기"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
           hide-details
           single-line
+          clearable
+          rounded="lg"
         ></v-text-field>
       </template>
 
@@ -24,6 +26,7 @@
         :items="Object.values(data[1] ?? {})"
         :search="search1"
         hide-default-footer
+        density="compact"
         no-data-text="학생이 없습니다."
       >
         <template #item.actions="{ item }">
@@ -34,13 +37,8 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item @click="viewDetails(item)">
+              <v-list-item @click="deleteStudent(1, item)" base-color="red">
                 <v-list-item-title>
-                  <v-icon>mdi-information</v-icon> 정보 보기
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="deleteStudent(1, item)">
-                <v-list-item-title color="red">
                   <v-icon>mdi-delete</v-icon>
                   삭제하기
                 </v-list-item-title>
@@ -56,11 +54,13 @@
       <template v-slot:text>
         <v-text-field
           v-model="search2"
-          placeholder="학생 검색하기"
+          placeholder="야자 2교시 학생 검색하기"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
           hide-details
           single-line
+          clearable
+          rounded="lg"
         ></v-text-field>
       </template>
 
@@ -75,6 +75,7 @@
         :items="Object.values(data[2] ?? {})"
         :search="search2"
         hide-default-footer
+        density="compact"
         no-data-text="학생이 없습니다."
       >
         <template #item.actions="{ item }">
@@ -85,13 +86,8 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item @click="viewDetails(item)">
+              <v-list-item @click="deleteStudent(1, item)" base-color="red">
                 <v-list-item-title>
-                  <v-icon>mdi-information</v-icon> 정보 보기
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="deleteStudent(2, item)">
-                <v-list-item-title color="red">
                   <v-icon>mdi-delete</v-icon>
                   삭제하기
                 </v-list-item-title>
@@ -101,34 +97,11 @@
         </template>
       </v-data-table>
     </v-card>
-
-    <v-dialog v-model="studentInfo" height="600" max-width="1000">
-      <v-card class="d-flex justify-center pa-6">
-        <v-row class="fill-height">
-          <v-col>
-            <v-card class="pa-6 mb-4" variant="outlined">
-              <v-card-title class="text-center">
-                {{ viewStudent.studentId }} {{ viewStudent?.name }}
-              </v-card-title>
-            </v-card>
-
-            <div class="d-flex">
-              <v-sheet width="1000">
-                <VCalendar :events="events"></VCalendar>
-              </v-sheet>
-            </div>
-          </v-col>
-        </v-row>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
 <script setup>
-import { VCalendar } from "vuetify/labs/VCalendar";
-
-import { ref, computed, onMounted } from "vue";
-const { $auth, $db } = useNuxtApp();
+const { $db } = useNuxtApp();
 
 const time = ref(null);
 const date = ref(null);
@@ -136,8 +109,6 @@ const date = ref(null);
 const data = ref([]);
 const search1 = ref("");
 const search2 = ref("");
-const studentInfo = ref(null);
-const viewStudent = ref(null);
 const events = ref([
   {
     title: "Weekly Meeting",
@@ -168,35 +139,11 @@ onMounted(() => {
   });
 });
 
-const fetchStudent = (studentId) => {
-  const studentDB = dbRef($db, `students/${studentId}/check-in`);
-  onValue(studentDB, (snapshot) => {
-    if (snapshot.exists()) {
-      viewStudent.value.monthlyInfo = Object.keys(snapshot.val());
-      events.value = [];
-      Object.keys(snapshot.val() ?? {}).forEach((key) => {
-        events.value.push({
-          title: `야자 참여`,
-          start: parseKoreanDateString(key),
-          end: parseKoreanDateString(key),
-        });
-      });
-    }
-  });
-};
-
-const viewDetails = (item) => {
-  studentInfo.value = true;
-  viewStudent.value = item;
-  fetchStudent(item.studentId);
-};
-
 const deleteStudent = (schedule, item) => {
   const checkInDB = dbRef(
     $db,
     `check-in/${date.value}/${schedule}/${item.studentId}`
   );
-  console.log()
   onValue(checkInDB, (snapshot) => {
     if (snapshot.exists()) {
       set(checkInDB, null);

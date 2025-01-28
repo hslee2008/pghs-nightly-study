@@ -51,23 +51,6 @@
           </v-card-title>
         </v-card>
       </v-col>
-
-      <!-- Check In Link -->
-      <v-col cols="12" md="6">
-        <v-card
-          class="link-card"
-          color="grey"
-          dark
-          elevation="3"
-          to="/chart"
-          tag="router-link"
-        >
-          <v-card-title>
-            <v-icon class="mr-3" large>mdi-database</v-icon>
-            출석 데이터 확인하기
-          </v-card-title>
-        </v-card>
-      </v-col>
     </v-row>
   </v-container>
 </template>

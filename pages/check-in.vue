@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div class="text-center mx-5">
     <h2 class="text-grey-darken-2">{{ date }}</h2>
     <p class="text-grey-darken-1">야자 {{ getSchedule() }}교시 / {{ time }}</p>
 
@@ -31,41 +31,59 @@
     <div class="d-flex" style="direction: rtl; text-align: justify">
       <v-checkbox
         v-model="autoCheck"
-        label="다음 QR찍을 시 자동출석"
+        label="다음부터 자동 정보 입력"
         color="primary"
       ></v-checkbox>
     </div>
 
     <br />
 
-    <v-btn color="primary" block @click="checkIn">출석하기</v-btn>
+    <v-btn
+      color="primary"
+      block
+      @click="checkIn"
+      :disabled="!seat || checkedIn"
+    >
+      출석하기
+    </v-btn>
 
-    <v-dialog v-model="checkedIn" max-width="600" persistent>
+    <v-dialog v-model="checkedIn" persistent>
       <v-card class="pb-3 text-center pt-5">
+        <div style="position: absolute; top: 0; right: 0" class="mx-2 mt-1">
+          <p class="text-grey">버전 v0.0.2</p>
+        </div>
         <div class="text-center">
           <v-icon size="x-large">mdi-desk-lamp</v-icon>
         </div>
 
-        <v-card-title> {{ name }} | 야자 {{ getSchedule() }}교시 </v-card-title>
-        <v-card-subtitle> {{ seat }} </v-card-subtitle>
+        <v-card-title class="text-h5">
+          야자 {{ getSchedule() }}교시 ({{ name }})
+        </v-card-title>
+        <v-card-subtitle class="text-h6"> 자리: {{ seat }} </v-card-subtitle>
 
         <br />
 
-        <v-card-actions class="d-flex justify-center">
-          <v-btn color="primary" variant="tonal" to="/data">
-            야자 순위 보기
-          </v-btn>
-        </v-card-actions>
-
-        <div>
-          <p class="text-grey">버전 v0.0.1</p>
+        <div v-if="getSchedule() === 1" class="mx-5">
+          <p class="text-justify">
+            출석이 끝났습니다. 2교시 때 QR을 다시 찍어서 출석해주세요.
+          </p>
         </div>
+
+        <br />
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-btn color="primary" text to="/data">야자 순위 확인하기</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
 </template>
 
 <script setup>
+import { get } from "firebase/database";
+
 const { $auth, $db } = useNuxtApp();
 
 const time = ref(null);
@@ -135,6 +153,14 @@ function checkIn() {
   );
   set(studentDB, {
     time: new Date().toLocaleTimeString(),
+  });
+
+  const nameDB = dbRef(
+    $db,
+    `students/${studentId.value}`
+  );
+  update(nameDB, {
+    name: name.value,
   });
 
   checkedIn.value = true;
