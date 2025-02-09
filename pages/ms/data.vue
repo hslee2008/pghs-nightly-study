@@ -1,6 +1,6 @@
 <template>
   <div class="text-center mx-10">
-    <h1 class="text-grey-darken-2">야자 출석 순위</h1>
+    <h1 class="text-grey-darken-2">아침 자습 출석 순위</h1>
 
     <br />
 
@@ -78,7 +78,7 @@ function showStudentDetails(student) {
 }
 
 onMounted(() => {
-  const studentsDB = dbRef($db, "students");
+  const studentsDB = dbRef($db, "zms-students");
 
   onValue(studentsDB, (snapshot) => {
     if (snapshot.exists()) {
