@@ -170,16 +170,18 @@ onMounted(() => {
 const categorizeStudent = (studentId_string) => {
   const studentId = parseInt(studentId_string.slice(0, 3));
   if (studentId >= 101 && studentId <= 108) {
-    return `10${studentId % 10}`; // 101, 102, ..., 108
+    return `10${studentId % 10}`;
   } else if (studentId >= 201 && studentId <= 208) {
-    return `20${studentId % 10}`; // 201, 202, ..., 208
+    return `20${studentId % 10}`; 
+  }else if (studentId >= 301 && studentId <= 308) {
+    return `30${studentId % 10}`; 
   } else {
     return "Unknown";
   }
 };
 
 const formatCategory = (category) => {
-  const year = category.startsWith("10") ? "1학년" : "2학년";
+  const year = category.startsWith("10") ? "1학년" : category.startsWith("20") ? "2학년" : "3학년";
   const classNum = category.slice(-1) + "반";
   return `${year} ${classNum}`;
 };
